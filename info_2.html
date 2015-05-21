@@ -11,32 +11,35 @@
 <link rel="stylesheet" href="./css/style.css">
 <link rel="stylesheet" href="./css/animate.min.css">
 <style type="text/css">
-body{overflow: hidden;}
+body{background: #000;overflow: hidden;}
 .header{position: fixed;width: 100%;top:0;z-index:10;}
 .hwrp{position: absolute;width: 100%;text-align: center;color:#FFF;top:0;font-size: 16px;line-height: 46px;}
 .slide_link{display: inline-block;background: #000;width: 35px;height: 40px;position: absolute;left: 0;top: 0;opacity: 0;}
 
 .header img{width: 100%;}
 .m_pic{position: absolute;width: 100%;overflow: auto;left:100%;top:0;bottom:0;}
-.m_pic img{width: 100%;position: absolute;}
+.m_pic img{width: 100%;position: absolute;top:0;bottom:0;margin: auto;}
 .m_show{left:0;}
-.edit_pre{position: absolute;display: inline-block;width: 60px;height: 60px;top:40px;left:5px;}
+
 </style>
 </head>
 <body>
-    <div class="header">
-		<a href="javascript:history.go(-1)" class="slide_link"></a>
-		<a href="javascript:void(0);" class="share_p"></a>
+	<div class="header">
+		<img src="./img/top_1.png" alt="">
+        <div class="hwrp"><span class="pgd">1</span> / <span class="pga">1</span></div>
+		<a href="index.html" class="slide_link"></a>
+		<a href="javascript:void(0);" class="share"></a>
 	</div>
+
 	<div class="main hammer wraper">
 		<div class="animated m_pic m_show">
-			<img class="m_pic_cd" src="./img/edit_4_1.jpg" alt="">
+			<img class="m_pic_cd" src="./img/hzj_1.jpg" alt="">
 		</div>
 		<div class="animated m_pic">
-			<img class="m_pic_cd" src="./img/edit_4_2.jpg" alt="">
+			<img class="m_pic_cd" src="./img/hzj_2.jpg" alt="">
 		</div>
         <div class="animated m_pic">
-			<img class="m_pic_cd" src="./img/edit_4_3.jpg" alt="">
+			<img class="m_pic_cd" src="./img/hzj_3.jpg" alt="">
 		</div>
 	</div>
 
@@ -60,19 +63,29 @@ body{overflow: hidden;}
 <script type="text/javascript" src="./js/jquery.hammer.js"></script>
 <script type="text/javascript">
 $(function(){
+    var H = $(window).height();
+    $('.m_pic_cd').each(function(){
+        var h = $(this).height();
+        if(h>H){
+            $(this).css({'top':'0','bottom':'none','margin':'0'});
+        }
+    });
+
 	var nrote = 0;
     var count = $('.m_pic').length;
 
-	var hammertime = $('.hammer').hammer();
+    $('.pga').text(count);
 
-    $('.share_p').click(function(){
+    $('.m_pic').on('click',function(){
+        $('.header').slideToggle(150);
+    });
+
+	var hammertime = $('.hammer').hammer();
+	hammertime.on('swipeleft', function(ev){
+        $('.header').fadeOut();
 		nrote++;
 		if(nrote==count){
-			nrote--;
-            $('.shares').show().animate({'bottom':'0'},160);
-            $('.shares').mask();
-            $('#fun_mask').click(hide_share);
-            return false;
+			nrote = 0;
 		}
         $('.pgd').text(nrote+1);
         $('.m_show').animate({'left':'-100%'},250,function(){
@@ -80,12 +93,12 @@ $(function(){
 		});
         $('.m_pic').not('.m_show').css('left','100%');
 		$('.m_pic').eq(nrote).animate({'left':'0'},250).addClass('m_show');
-    });
+	});
 	hammertime.on('swiperight', function(ev){
+        $('.header').fadeOut();
 		nrote--;
 		if(nrote==-1){
-			nrote++;
-            return false;
+			nrote = count-1;
 		}
         $('.pgd').text(nrote+1);
         $('.m_show').animate({'left':'100%'},250,function(){
